@@ -1,4 +1,4 @@
-- nonsequiturs
+nonsequiturs:
   - "Red hair, sir, in my opinion, is dangerous."
   - "Some minds are like soup in a poor restaurant—better left unstirred."
   - "There is no time, sir, at which ties do not matter."
@@ -6,7 +6,7 @@
   - "A bear, Sir. If you will turn your head, you will observe that a bear is standing in your immediate rear inspecting you in a somewhat menacing manner."
   - "An apple a day, if well aimed, keeps the doctor away."
   - "I appear inadvertently to have caused much trouble, sir."
-- responses-male
+responses:
   - "The mood will pass, sir."
   - "You would not enjoy Nietzsche, sir. He is fundamentally unsound."
   - "A trifle too bizarre, sir, in my opinion."
@@ -24,8 +24,8 @@
   - "Just as you say, sir."
   - "There are two five-pound notes, three one-pounds, a ten-shillings, two half-crowns, a florin, four shillings, a sixpence, and a halfpenny, sir."
   - "It is my practice at this hour to read some improving book; but, if you desire my services, this can easily be postponed, or, indeed, abandoned altogether."
-- mentions
+mentions:
   - "I am saying nothing against his moral character, sir."
-- responses-female
+responses-female:
   - "Thank you, miss. I am glad to have given satisfaction."
-- answers
+
