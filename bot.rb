@@ -3,6 +3,8 @@ require 'yaml'
 require 'chatterbot/dsl'
 require 'pry'
 
+ME = "@borntoserveholt"
+
 quotes = YAML.load_file('jeeves.yml')
 
 creds = YAML.load_file('creds.yml')
@@ -20,8 +22,9 @@ streaming {
     tweet "@#{user.screen_name} #{quotes['nonsequiturs'].sample}"
   }
   
-  replies {|tweet|
-    self.pry
+  replies {|t|
+    mentions = t.text.scan(/@\w+/).select{|h| h != ME }
+    reply "@#{t.user.screen_name} #{mentions.join(' ')} #{quotes['responses'].sample}"[0...138], t
   }
   
 }

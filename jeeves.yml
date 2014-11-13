@@ -22,10 +22,7 @@ responses:
   - "It is hardly my place, sir, to criticize the facial peculiarities of your friends."
   - "Sir?"
   - "Just as you say, sir."
-  - "There are two five-pound notes, three one-pounds, a ten-shillings, two half-crowns, a florin, four shillings, a sixpence, and a halfpenny, sir."
-  - "It is my practice at this hour to read some improving book; but, if you desire my services, this can easily be postponed, or, indeed, abandoned altogether."
+  - "There are two five-pound notes, three one-pounds, a ten-shillings, two half-crowns, a florin, and four shillings, sir."
+  - "It is my practice at this hour to read some improving book; but, if you desire my services, this can be postponed."
 mentions:
   - "I am saying nothing against his moral character, sir."
-responses-female:
-  - "Thank you, miss. I am glad to have given satisfaction."
-
