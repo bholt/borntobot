@@ -5,7 +5,7 @@ require 'pry'
 
 ME = "@borntoserveholt"
 
-quotes = YAML.load_file('jeeves.yml')
+quotes = YAML.load_file('hitchhiker.yml')
 
 creds = YAML.load_file('creds.yml')
 puts creds
@@ -23,8 +23,23 @@ streaming {
   }
   
   replies {|t|
-    mentions = t.text.scan(/@\w+/).select{|h| h != ME }
-    reply "@#{t.user.screen_name} #{mentions.join(' ')} #{quotes['responses'].sample}"[0...138], t
+    mentions = ["@#{t.user.screen_name}"]
+    # also get any other @mentions from the previous tweet
+    mentions += t.text.scan(/@\w+/).select{|h| h != ME }
+    
+    q = quotes['responses'].sample
+    
+    if quotes['names'] # try replacing names in quotes with @mentions
+      r = /(#{quotes['names'].join('|')})/
+      if t =~ r # quote contains any of the names
+        name = mentions.shift # take first name off the mentions list
+        q = t.gsub(r, name) # replace name in quote with @mention
+      end
+    end
+    
+    twt = "#{mentions.join(' ')} #{q}"
+    puts ">>> tweeting: '#{twt}'"
+    reply twt[0...138], t
   }
   
 }
