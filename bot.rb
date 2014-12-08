@@ -2,10 +2,11 @@
 require 'yaml'
 require 'chatterbot/dsl'
 require 'pry'
+require 'awesome_print'
 
 ME = "@borntoserveholt"
 
-quotes = YAML.load_file('hitchhiker.yml')
+$quotes = YAML.load_file('hitchhiker.yml')
 
 creds = YAML.load_file('creds.yml')
 puts creds
@@ -16,30 +17,42 @@ token           creds['token']
 
 verbose
 
+def compose_response(text, user)
+  mentions = ["@#{user}"]
+  # also get any other @mentions from the previous tweet
+  mentions += text.scan(/@\w+/).select{|h| h != ME }
+  
+  q = $quotes['responses'].sample
+  
+  if $quotes['names'] # try replacing names in quotes with @mentions
+    r = /(#{$quotes['names'].join('|')})/
+    if q =~ r # quote contains any of the names
+      name = mentions.shift # take first name off the mentions list
+      q = q.gsub(r, name) # replace name in quote with @mention
+    end
+  end
+  
+  "#{mentions.join(' ')} #{q}"  
+end
+
 streaming {
   
   followed {|user|
-    tweet "@#{user.screen_name} #{quotes['nonsequiturs'].sample}"
+    tweet "@#{user.screen_name} #{$quotes['nonsequiturs'].sample}"
   }
   
   replies {|t|
-    mentions = ["@#{t.user.screen_name}"]
-    # also get any other @mentions from the previous tweet
-    mentions += t.text.scan(/@\w+/).select{|h| h != ME }
-    
-    q = quotes['responses'].sample
-    
-    if quotes['names'] # try replacing names in quotes with @mentions
-      r = /(#{quotes['names'].join('|')})/
-      if t =~ r # quote contains any of the names
-        name = mentions.shift # take first name off the mentions list
-        q = t.gsub(r, name) # replace name in quote with @mention
-      end
-    end
-    
-    twt = "#{mentions.join(' ')} #{q}"
+    twt = compose_response(t.text, t.user.screen_name)
     puts ">>> tweeting: '#{twt}'"
     reply twt[0...138], t
+  }
+  
+  direct_message {|m|
+    unless ME =~ /#{m.sender.screen_name}/
+      user = m.sender.screen_name
+      txt = compose_response(m.full_text, user)
+      client.create_direct_message("@#{user}", txt[0...138])
+    end
   }
   
 }
