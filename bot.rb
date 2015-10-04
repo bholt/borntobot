@@ -22,6 +22,8 @@ def compose_response(text, user)
   # also get any other @mentions from the previous tweet
   mentions += text.scan(/@\w+/).select{|h| h != ME }
   
+  return nil unless mentions.include? ME
+  
   q = $quotes['responses'].sample
   
   if $quotes['names'] # try replacing names in quotes with @mentions
@@ -43,8 +45,10 @@ streaming {
   
   replies {|t|
     twt = compose_response(t.text, t.user.screen_name)
-    puts ">>> tweeting: '#{twt}'"
-    reply twt[0...138], t
+    if twt
+      puts ">>> tweeting: '#{twt}'"
+      reply twt[0...138], t
+    end
   }
   
   direct_message {|m|
